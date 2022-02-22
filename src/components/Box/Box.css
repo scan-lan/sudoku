@@ -1,0 +1,7 @@
+.box {
+  display: grid;
+  grid-template-columns: repeat(3, 5rem);
+  grid-template-rows: repeat(3, 5rem);
+  align-items: stretch;
+  justify-items: stretch;
+}
