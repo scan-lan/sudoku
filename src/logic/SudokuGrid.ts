@@ -1,4 +1,4 @@
-import { coordinate, sudokuCell, sudokuGrid } from "../types/SudokuTypes";
+import { coordinate, sudokuCell } from "../types/SudokuTypes";
 import CellInfo from "../types/CellInfo";
 
 export default class SudokuGrid {

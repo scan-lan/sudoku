@@ -27,7 +27,20 @@ const Cell = ({ cell, onCellClick }: CellProps) => {
       {cell.value ? (
         <div className="value">{cell.value}</div>
       ) : (
-        <div className="guesses">{cell.guesses}</div>
+        <div className="guesses">
+          {cell.guesses.map((guess, i) => (
+            <div
+              className="guess"
+              key={i}
+              style={{
+                color: cell.guesses.length === 1 ? "green" : "#555",
+                fontWeight: cell.guesses.length === 1 ? 800 : 500,
+              }}
+            >
+              {guess}
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );

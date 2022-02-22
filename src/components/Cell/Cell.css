@@ -7,3 +7,15 @@
 .value {
   font-size: 3rem;
 }
+
+.guesses {
+  height: 100%;
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+}
+
+.guess {
+  font-weight: 700;
+}

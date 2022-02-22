@@ -3,9 +3,8 @@ import SudokuGrid, { SudokuCell } from "./SudokuGrid";
 const provideCellGuesses = (
   cell: SudokuCell,
   sudokuGrid: SudokuGrid
-): number[] => {
-  const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-  const guesses = numbers.filter(
+): number[] =>
+  [1, 2, 3, 4, 5, 6, 7, 8, 9].filter(
     (guess) =>
       !sudokuGrid
         .column(cell.column)
@@ -20,9 +19,6 @@ const provideCellGuesses = (
         .map((sudokuCell) => sudokuCell.value)
         .includes(guess)
   );
-
-  return guesses;
-};
 
 const solve = (grid: SudokuGrid, steps?: number) => {
   if (!steps) steps = 1;

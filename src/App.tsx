@@ -19,7 +19,7 @@ for (let i = 0; i < 9; i++) {
 }
 
 let deleted = 0;
-while (deleted < 30) {
+while (deleted < 50) {
   let row = Math.round(Math.random() * 9);
   let column = Math.round(Math.random() * 9);
   try {
