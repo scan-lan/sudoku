@@ -2,13 +2,19 @@ import React from "react";
 import "./Menu.css";
 
 interface MenuProps {
-  onGuessAllClick: () => void;
+  onGetAllCandidatesClick: () => void;
   onFillSolvedClick: () => void;
+  onFilterCandidatesClick: () => void;
 }
 
-const Menu = ({ onGuessAllClick, onFillSolvedClick }: MenuProps) => (
+const Menu = ({
+  onGetAllCandidatesClick,
+  onFillSolvedClick,
+  onFilterCandidatesClick,
+}: MenuProps) => (
   <div className="menu">
-    <button onClick={onGuessAllClick}>Guess</button>
+    <button onClick={onGetAllCandidatesClick}>Get candidates</button>
+    <button onClick={onFilterCandidatesClick}>Filter</button>
     <button onClick={onFillSolvedClick}>Fill solved</button>
   </div>
 );

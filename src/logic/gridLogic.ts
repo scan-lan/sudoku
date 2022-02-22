@@ -18,3 +18,31 @@ export const getBox = (grid: SudokuGrid, index: number): SudokuCell[] => {
 
   return boxArray;
 };
+
+export const getRowExcludingSelf = (
+  grid: SudokuGrid,
+  index: number,
+  column: number
+) => {
+  const row = getRow(grid, index);
+  return row.slice(0, column).concat(row.slice(column + 1));
+};
+
+export const getColumnExcludingSelf = (
+  grid: SudokuGrid,
+  index: number,
+  row: number
+) => {
+  const column = getColumn(grid, index);
+  return column.slice(0, row).concat(column.slice(row + 1));
+};
+
+export const getBoxExcludingSelf = (
+  grid: SudokuGrid,
+  index: number,
+  cell: SudokuCell
+) => {
+  const box = getBox(grid, index);
+  const cellIndex = box.indexOf(cell);
+  return box.slice(0, cellIndex).concat(box.slice(cellIndex + 1));
+};

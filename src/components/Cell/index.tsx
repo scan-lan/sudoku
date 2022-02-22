@@ -29,16 +29,16 @@ const Cell = ({ cell, onCellClick }: CellProps) => {
         <div className="value">{cell.value}</div>
       ) : (
         <div className="candidates">
-          {cell.candidates.map((guess, i) => (
+          {cell.candidates.map((candidate, i) => (
             <div
-              className="guess"
+              className="candidate"
               key={i}
               style={{
                 color: cell.candidates.length === 1 ? "white" : "#555",
                 fontWeight: cell.candidates.length === 1 ? 800 : 500,
               }}
             >
-              {guess}
+              {candidate}
             </div>
           ))}
         </div>
