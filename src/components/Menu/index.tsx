@@ -3,18 +3,22 @@ import "./Menu.css";
 
 interface MenuProps {
   onGetAllCandidatesClick: () => void;
-  onFillSolvedClick: () => void;
   onFilterCandidatesClick: () => void;
+  onFillSolvedClick: () => void;
+  filterCandidatesActive: boolean;
 }
 
 const Menu = ({
   onGetAllCandidatesClick,
-  onFillSolvedClick,
   onFilterCandidatesClick,
+  onFillSolvedClick,
+  filterCandidatesActive,
 }: MenuProps) => (
   <div className="menu">
     <button onClick={onGetAllCandidatesClick}>Get candidates</button>
-    <button onClick={onFilterCandidatesClick}>Filter</button>
+    <button disabled={filterCandidatesActive} onClick={onFilterCandidatesClick}>
+      Filter candidates
+    </button>
     <button onClick={onFillSolvedClick}>Fill solved</button>
   </div>
 );

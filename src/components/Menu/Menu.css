@@ -1,7 +1,7 @@
 .menu {
   grid-area: menu;
   display: grid;
-  gap: 2rem;
+  gap: 1rem;
   align-items: center;
   justify-items: center;
   grid-template-rows: 1fr auto auto auto 1fr;

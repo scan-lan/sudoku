@@ -5,7 +5,6 @@ import Menu from "./components/Menu";
 import {
   fillSolved,
   filterAllCellCandidates,
-  filterCandidates,
   getAllCellCandidates,
   getCandidates,
 } from "./logic/solve";
@@ -13,6 +12,7 @@ import SudokuCell from "./types/SudokuCell";
 
 interface AppState {
   grid: SudokuCell[][];
+  filterCandidatesDisabled: boolean;
 }
 
 const grid = [
@@ -50,7 +50,7 @@ for (let i = 0; i < 9; i++) {
 }
 
 // let deleted = 0;
-// while (deleted < 60) {
+// while (deleted < 50) {
 //   let row = Math.round(Math.random() * 9);
 //   let column = Math.round(Math.random() * 9);
 //   try {
@@ -70,7 +70,8 @@ const updateCellCandidates = (
     row: number;
     column: number;
   },
-  cellCandidates: number[]
+  cellCandidates: number[],
+  filterButtonDisabled: boolean
 ) => {
   setState((prevState) => ({
     grid: [
@@ -85,6 +86,7 @@ const updateCellCandidates = (
       ],
       ...prevState.grid.slice(cell.row + 1),
     ],
+    filterCandidatesDisabled: filterButtonDisabled,
   }));
 };
 
@@ -97,6 +99,7 @@ const updateCellValue = (
   value: number
 ) => {
   setState((prevState) => ({
+    ...prevState,
     grid: [
       ...prevState.grid.slice(0, cell.row),
       [
@@ -116,17 +119,16 @@ const updateCellValue = (
 const App = () => {
   const [state, setState] = useState<AppState>({
     grid: validSudokuGrid,
+    filterCandidatesDisabled: true,
   });
 
   const onCellClick = (cell: SudokuCell) => {
     if (!cell.value) {
       if (cell.candidates.length === 1) {
         updateCellValue(setState, cell, cell.candidates[0]);
-      } else if (!cell.candidates) {
+      } else if (!cell.candidates || cell.candidates.length > 1) {
         const cellCandidates = getCandidates(cell, state.grid);
-        updateCellCandidates(setState, cell, cellCandidates);
-      } else {
-        console.log(filterCandidates(state.grid, cell));
+        updateCellCandidates(setState, cell, cellCandidates, false);
       }
     }
   };
@@ -137,7 +139,20 @@ const App = () => {
       updateCellCandidates(
         setState,
         cellWithCandidates.cell,
-        cellWithCandidates.candidates
+        cellWithCandidates.candidates,
+        false
+      );
+    });
+  };
+
+  const onFilterCandidatesClick = () => {
+    const cellsWithCandidates = filterAllCellCandidates(state.grid);
+    cellsWithCandidates.forEach((cellWithCandidates) => {
+      updateCellCandidates(
+        setState,
+        cellWithCandidates.cell,
+        cellWithCandidates.candidates,
+        true
       );
     });
   };
@@ -149,23 +164,13 @@ const App = () => {
     });
   };
 
-  const onFilterCandidatesClick = () => {
-    const cellsWithCandidates = filterAllCellCandidates(state.grid);
-    cellsWithCandidates.forEach((cellWithCandidates) => {
-      updateCellCandidates(
-        setState,
-        cellWithCandidates.cell,
-        cellWithCandidates.candidates
-      );
-    });
-  };
-
   return (
     <div className="App">
       <Menu
         onFillSolvedClick={onFillSolvedClick}
         onGetAllCandidatesClick={onGetCandidatesClick}
         onFilterCandidatesClick={onFilterCandidatesClick}
+        filterCandidatesActive={state.filterCandidatesDisabled}
       />
       <Grid grid={state.grid} onCellClick={onCellClick} />
     </div>
