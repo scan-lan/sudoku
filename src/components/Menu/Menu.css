@@ -1,0 +1,13 @@
+.menu {
+  grid-area: menu;
+  display: grid;
+  gap: 2rem;
+  align-items: center;
+  justify-items: center;
+}
+
+button {
+  font-size: 1.5rem;
+  padding: 1rem 0;
+  min-width: 12rem;
+}
