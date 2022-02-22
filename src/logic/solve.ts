@@ -1,4 +1,5 @@
-import SudokuGrid, { SudokuCell } from "./SudokuGrid";
+import SudokuCell, { SudokuGrid } from "../types/SudokuCell";
+import { getBox, getColumn, getRow } from "./gridLogic";
 
 const provideCellGuesses = (
   cell: SudokuCell,
@@ -6,16 +7,13 @@ const provideCellGuesses = (
 ): number[] =>
   [1, 2, 3, 4, 5, 6, 7, 8, 9].filter(
     (guess) =>
-      !sudokuGrid
-        .column(cell.column)
+      !getColumn(sudokuGrid, cell.column)
         .map((sudokuCell) => sudokuCell.value)
         .includes(guess) &&
-      !sudokuGrid
-        .row(cell.row)
+      !getRow(sudokuGrid, cell.row)
         .map((sudokuCell) => sudokuCell.value)
         .includes(guess) &&
-      !sudokuGrid
-        .box(cell.box)
+      !getBox(sudokuGrid, cell.box)
         .map((sudokuCell) => sudokuCell.value)
         .includes(guess)
   );
@@ -32,7 +30,7 @@ const guessAll = (sudokuGrid: SudokuGrid): CellWithGuesses[] => {
   const cellsWithGuesses = [] as CellWithGuesses[];
   for (let i = 0; i < 9; i++) {
     for (let j = 0; j < 9; j++) {
-      const cell = sudokuGrid.cellAt([i, j]);
+      const cell = sudokuGrid[i][j];
       if (!cell.value) {
         cellsWithGuesses.push({
           cell: {
@@ -59,7 +57,7 @@ const fillSolved = (sudokuGrid: SudokuGrid): CellWithValue[] => {
   const cellsWithValues = [] as CellWithValue[];
   for (let i = 0; i < 9; i++) {
     for (let j = 0; j < 9; j++) {
-      const cell = sudokuGrid.cellAt([i, j]);
+      const cell = sudokuGrid[i][j];
       if (!cell.value && cell.guesses.length === 1) {
         cellsWithValues.push({
           cell: {

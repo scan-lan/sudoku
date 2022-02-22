@@ -3,19 +3,30 @@ import "./App.css";
 import Grid from "./components/Grid";
 import Menu from "./components/Menu";
 import { fillSolved, guessAll, provideCellGuesses } from "./logic/solve";
-import SudokuGrid, { SudokuCell } from "./logic/SudokuGrid";
-import CellInfo from "./types/CellInfo";
+import SudokuCell from "./types/SudokuCell";
 
 interface AppState {
-  grid: CellInfo[][];
+  grid: SudokuCell[][];
 }
 
-const validSudokuGrid = [[], [], [], [], [], [], [], [], []] as CellInfo[][];
+const validSudokuGrid = [[], [], [], [], [], [], [], [], []] as SudokuCell[][];
 for (let i = 0; i < 9; i++) {
   for (let j = 0; j < 9; j++) {
     let value = j + (Math.floor(i / 3) + 1) + (i % 3) * 3;
     if (value > 9) value -= 9;
-    validSudokuGrid[i].push({ value: value, guesses: [] });
+
+    let box;
+    if (i < 3) box = Math.floor(j / 3);
+    else if (i < 6) box = Math.floor(j / 3) + 3;
+    else box = Math.floor(j / 3) + 6;
+
+    validSudokuGrid[i].push({
+      row: i,
+      column: j,
+      value: value,
+      guesses: [],
+      box: box,
+    });
   }
 }
 
@@ -31,6 +42,9 @@ while (deleted < 40) {
   deleted++;
 }
 
+// TODO: generalise to updateCell(setState, cell, updateObj) where
+// updateObj == {guesses: []} | {value: 2} ... and the object gets spread
+// in the correct place
 const updateGuesses = (
   setState: (callback: (prevState: AppState) => AppState) => void,
   cell: {
@@ -45,7 +59,7 @@ const updateGuesses = (
       [
         ...prevState.grid[cell.row].slice(0, cell.column),
         {
-          value: prevState.grid[cell.row][cell.column].value,
+          ...prevState.grid[cell.row][cell.column],
           guesses: cellGuesses,
         },
         ...prevState.grid[cell.row].slice(cell.column + 1),
@@ -69,6 +83,7 @@ const updateValues = (
       [
         ...prevState.grid[cell.row].slice(0, cell.column),
         {
+          ...prevState.grid[cell.row][cell.column],
           value: value,
           guesses: [],
         },
@@ -84,22 +99,20 @@ const App = () => {
     grid: validSudokuGrid,
   });
 
-  const gridInstance = new SudokuGrid(state.grid);
-
   const onCellClick = (cell: SudokuCell) => {
-    const cellGuesses = provideCellGuesses(cell, gridInstance);
+    const cellGuesses = provideCellGuesses(cell, state.grid);
     updateGuesses(setState, cell, cellGuesses);
   };
 
   const onGuessAllClick = () => {
-    const cellsWithGuesses = guessAll(gridInstance);
+    const cellsWithGuesses = guessAll(state.grid);
     cellsWithGuesses.forEach((cellWithGuesses) => {
       updateGuesses(setState, cellWithGuesses.cell, cellWithGuesses.guesses);
     });
   };
 
   const onFillSolvedClick = () => {
-    const cellsWithValues = fillSolved(gridInstance);
+    const cellsWithValues = fillSolved(state.grid);
     cellsWithValues.forEach((cellWithValue) => {
       updateValues(setState, cellWithValue.cell, cellWithValue.value);
     });
@@ -111,7 +124,7 @@ const App = () => {
         onFillSolvedClick={onFillSolvedClick}
         onGuessAllClick={onGuessAllClick}
       />
-      <Grid grid={gridInstance} onCellClick={onCellClick} />
+      <Grid grid={state.grid} onCellClick={onCellClick} />
     </div>
   );
 };

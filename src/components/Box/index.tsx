@@ -1,6 +1,6 @@
 import React from "react";
 import Cell from "../Cell";
-import { SudokuCell } from "../../logic/SudokuGrid";
+import SudokuCell from "../../types/SudokuCell";
 import "./Box.css";
 
 interface BoxProps {

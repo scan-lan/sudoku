@@ -1,5 +1,5 @@
 import React from "react";
-import { SudokuCell } from "../../logic/SudokuGrid";
+import SudokuCell from "../../types/SudokuCell";
 import { coordinate } from "../../types/SudokuTypes";
 import "./Cell.css";
 
@@ -22,6 +22,7 @@ const Cell = ({ cell, onCellClick }: CellProps) => {
           ? "none"
           : "1px dashed #888",
         borderBottom: [2, 5, 8].includes(cell.row) ? "none" : "1px dashed #888",
+        backgroundColor: cell.guesses.length === 1 ? "green" : "white",
       }}
     >
       {cell.value ? (
@@ -33,7 +34,7 @@ const Cell = ({ cell, onCellClick }: CellProps) => {
               className="guess"
               key={i}
               style={{
-                color: cell.guesses.length === 1 ? "green" : "#555",
+                color: cell.guesses.length === 1 ? "white" : "#555",
                 fontWeight: cell.guesses.length === 1 ? 800 : 500,
               }}
             >

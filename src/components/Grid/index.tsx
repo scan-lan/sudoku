@@ -1,20 +1,21 @@
 import React from "react";
+import SudokuCell from "../../types/SudokuCell";
+import { getBox } from "../../logic/gridLogic";
 import Box from "../Box";
-import SudokuGrid, { SudokuCell } from "../../logic/SudokuGrid";
 import "./Grid.css";
 
 const Grid = ({
   grid,
   onCellClick,
 }: {
-  grid: SudokuGrid;
+  grid: SudokuCell[][];
   onCellClick: (cell: SudokuCell) => void;
 }) => {
   return (
     <div className="grid">
-      {grid.rows.map((_, i) => (
+      {grid.map((_, i) => (
         <Box
-          cells={grid.box(i).map((cell) => cell)}
+          cells={getBox(grid, i).map((cell) => cell)}
           onCellClick={onCellClick}
           key={i}
         />
