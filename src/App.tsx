@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./App.css";
 import Grid from "./components/Grid";
 import Menu from "./components/Menu";
-import { fillSolved, guessAll, provideCellGuesses } from "./logic/solve";
+import { fillSolved, getAllCellCandidates, getCandidates } from "./logic/solve";
 import SudokuCell from "./types/SudokuCell";
 
 interface AppState {
@@ -24,7 +24,7 @@ for (let i = 0; i < 9; i++) {
       row: i,
       column: j,
       value: value,
-      guesses: [],
+      candidates: [],
       box: box,
     });
   }
@@ -45,13 +45,13 @@ while (deleted < 40) {
 // TODO: generalise to updateCell(setState, cell, updateObj) where
 // updateObj == {guesses: []} | {value: 2} ... and the object gets spread
 // in the correct place
-const updateGuesses = (
+const updateCandidates = (
   setState: (callback: (prevState: AppState) => AppState) => void,
   cell: {
     row: number;
     column: number;
   },
-  cellGuesses: number[]
+  cellCandidates: number[]
 ) => {
   setState((prevState) => ({
     grid: [
@@ -60,7 +60,7 @@ const updateGuesses = (
         ...prevState.grid[cell.row].slice(0, cell.column),
         {
           ...prevState.grid[cell.row][cell.column],
-          guesses: cellGuesses,
+          candidates: cellCandidates,
         },
         ...prevState.grid[cell.row].slice(cell.column + 1),
       ],
@@ -85,7 +85,7 @@ const updateValues = (
         {
           ...prevState.grid[cell.row][cell.column],
           value: value,
-          guesses: [],
+          candidates: [],
         },
         ...prevState.grid[cell.row].slice(cell.column + 1),
       ],
@@ -100,14 +100,18 @@ const App = () => {
   });
 
   const onCellClick = (cell: SudokuCell) => {
-    const cellGuesses = provideCellGuesses(cell, state.grid);
-    updateGuesses(setState, cell, cellGuesses);
+    const cellCandidates = getCandidates(cell, state.grid);
+    updateCandidates(setState, cell, cellCandidates);
   };
 
   const onGuessAllClick = () => {
-    const cellsWithGuesses = guessAll(state.grid);
-    cellsWithGuesses.forEach((cellWithGuesses) => {
-      updateGuesses(setState, cellWithGuesses.cell, cellWithGuesses.guesses);
+    const cellsWithCandidates = getAllCellCandidates(state.grid);
+    cellsWithCandidates.forEach((cellWithCandidates) => {
+      updateCandidates(
+        setState,
+        cellWithCandidates.cell,
+        cellWithCandidates.candidates
+      );
     });
   };
 

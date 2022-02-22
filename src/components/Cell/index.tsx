@@ -22,20 +22,20 @@ const Cell = ({ cell, onCellClick }: CellProps) => {
           ? "none"
           : "1px dashed #888",
         borderBottom: [2, 5, 8].includes(cell.row) ? "none" : "1px dashed #888",
-        backgroundColor: cell.guesses.length === 1 ? "green" : "white",
+        backgroundColor: cell.candidates.length === 1 ? "green" : "white",
       }}
     >
       {cell.value ? (
         <div className="value">{cell.value}</div>
       ) : (
-        <div className="guesses">
-          {cell.guesses.map((guess, i) => (
+        <div className="candidates">
+          {cell.candidates.map((guess, i) => (
             <div
               className="guess"
               key={i}
               style={{
-                color: cell.guesses.length === 1 ? "white" : "#555",
-                fontWeight: cell.guesses.length === 1 ? 800 : 500,
+                color: cell.candidates.length === 1 ? "white" : "#555",
+                fontWeight: cell.candidates.length === 1 ? 800 : 500,
               }}
             >
               {guess}

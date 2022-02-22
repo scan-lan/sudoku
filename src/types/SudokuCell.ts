@@ -5,7 +5,7 @@ export default interface SudokuCell {
   column: number;
   value: sudokuCell;
   box: number;
-  guesses: number[];
+  candidates: number[];
 }
 
 export type SudokuGrid = SudokuCell[][];

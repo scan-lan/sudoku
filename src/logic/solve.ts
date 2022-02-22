@@ -1,7 +1,7 @@
 import SudokuCell, { SudokuGrid } from "../types/SudokuCell";
 import { getBox, getColumn, getRow } from "./gridLogic";
 
-const provideCellGuesses = (
+export const getCandidates = (
   cell: SudokuCell,
   sudokuGrid: SudokuGrid
 ): number[] =>
@@ -18,31 +18,33 @@ const provideCellGuesses = (
         .includes(guess)
   );
 
-interface CellWithGuesses {
+interface CellWithCandidates {
   cell: {
     row: number;
     column: number;
   };
-  guesses: number[];
+  candidates: number[];
 }
 
-const guessAll = (sudokuGrid: SudokuGrid): CellWithGuesses[] => {
-  const cellsWithGuesses = [] as CellWithGuesses[];
+export const getAllCellCandidates = (
+  sudokuGrid: SudokuGrid
+): CellWithCandidates[] => {
+  const cellsWithPossibleValues = [] as CellWithCandidates[];
   for (let i = 0; i < 9; i++) {
     for (let j = 0; j < 9; j++) {
       const cell = sudokuGrid[i][j];
       if (!cell.value) {
-        cellsWithGuesses.push({
+        cellsWithPossibleValues.push({
           cell: {
             row: i,
             column: j,
           },
-          guesses: provideCellGuesses(cell, sudokuGrid),
+          candidates: getCandidates(cell, sudokuGrid),
         });
       }
     }
   }
-  return cellsWithGuesses;
+  return cellsWithPossibleValues;
 };
 
 interface CellWithValue {
@@ -53,18 +55,18 @@ interface CellWithValue {
   value: number;
 }
 
-const fillSolved = (sudokuGrid: SudokuGrid): CellWithValue[] => {
+export const fillSolved = (sudokuGrid: SudokuGrid): CellWithValue[] => {
   const cellsWithValues = [] as CellWithValue[];
   for (let i = 0; i < 9; i++) {
     for (let j = 0; j < 9; j++) {
       const cell = sudokuGrid[i][j];
-      if (!cell.value && cell.guesses.length === 1) {
+      if (!cell.value && cell.candidates.length === 1) {
         cellsWithValues.push({
           cell: {
             row: i,
             column: j,
           },
-          value: cell.guesses[0],
+          value: cell.candidates[0],
         });
       }
     }
@@ -73,9 +75,7 @@ const fillSolved = (sudokuGrid: SudokuGrid): CellWithValue[] => {
   return cellsWithValues;
 };
 
-const solve = (grid: SudokuGrid, steps?: number) => {
+export const solve = (grid: SudokuGrid, steps?: number) => {
   if (!steps) steps = 1;
   for (let i = 0; i < steps; i++) {}
 };
-
-export { solve, provideCellGuesses, guessAll, fillSolved };
