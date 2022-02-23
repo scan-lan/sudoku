@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "./App.css";
 import Grid from "./components/Grid";
 import Menu from "./components/Menu";
-import { excludeCandidatesInNakedSet } from "./logic/excludeCandidatesInNakedSet";
 import {
   fillSolved,
   filterAllCellCandidates,
@@ -61,16 +60,13 @@ while (deleted < 60) {
   deleted++;
 }
 
-// TODO: generalise to updateCell(setState, cell, updateObj) where
-// updateObj == {guesses: []} | {value: 2} ... and the object gets spread
-// in the correct place
-const updateCellCandidates = (
+const updateCell = (
   setState: (callback: (prevState: AppState) => AppState) => void,
   cell: {
     row: number;
     column: number;
   },
-  cellCandidates: number[],
+  updateObject: { candidates: number[] } | { value: number },
   filterButtonDisabled: boolean
 ) => {
   setState((prevState) => ({
@@ -80,7 +76,7 @@ const updateCellCandidates = (
         ...prevState.grid[cell.row].slice(0, cell.column),
         {
           ...prevState.grid[cell.row][cell.column],
-          candidates: cellCandidates,
+          updateObject,
         },
         ...prevState.grid[cell.row].slice(cell.column + 1),
       ],
@@ -90,98 +86,43 @@ const updateCellCandidates = (
   }));
 };
 
-const updateCellValue = (
-  setState: (callback: (prevState: AppState) => AppState) => void,
-  cell: {
-    row: number;
-    column: number;
-  },
-  value: number
-) => {
-  setState((prevState) => ({
-    ...prevState,
-    grid: [
-      ...prevState.grid.slice(0, cell.row),
-      [
-        ...prevState.grid[cell.row].slice(0, cell.column),
-        {
-          ...prevState.grid[cell.row][cell.column],
-          value: value,
-          candidates: [],
-        },
-        ...prevState.grid[cell.row].slice(cell.column + 1),
-      ],
-      ...prevState.grid.slice(cell.row + 1),
-    ],
-  }));
-};
-
 const App = () => {
   const [state, setState] = useState<AppState>({
     grid: validSudokuGrid,
     filterCandidatesDisabled: true,
   });
 
-  const onCellClick = (cell: SudokuCell) => {
-    if (!cell.value) {
-      if (cell.candidates.length === 1) {
-        updateCellValue(setState, cell, cell.candidates[0]);
-      } else {
-        // console.log(excludeCandidatesInNakedSet(cell, state.grid).candidates);
-
-        const cellWithCandidates = excludeCandidatesInNakedSet(
-          cell,
-          state.grid
+  const onCellClick = (clickedCell: SudokuCell) => {
+    if (!clickedCell.value) {
+      if (clickedCell.candidates.length === 1) {
+        updateCell(
+          setState,
+          clickedCell,
+          { value: clickedCell.candidates[0] },
+          false
         );
-        if (cellWithCandidates) {
-          updateCellCandidates(
-            setState,
-            cellWithCandidates.cell,
-            cellWithCandidates.candidates,
-            false
-          );
-        }
-
-        // const cellWithCandidates = filterCandidates(cell, state.grid);
-        // if (cellWithCandidates)
-        //   updateCellCandidates(
-        //     setState,
-        //     cellWithCandidates.cell,
-        //     cellWithCandidates.candidates,
-        //     false
-        //   );
       }
     }
   };
 
   const onGetCandidatesClick = () => {
     const cellsWithCandidates = getAllCellCandidates(state.grid);
-    cellsWithCandidates.forEach((cellWithCandidates) => {
-      updateCellCandidates(
-        setState,
-        cellWithCandidates.cell,
-        cellWithCandidates.candidates,
-        false
-      );
+    cellsWithCandidates.forEach(({ cell, candidates }) => {
+      updateCell(setState, cell, { candidates: candidates }, false);
     });
   };
 
   const onFilterCandidatesClick = () => {
     const cellsWithCandidates = filterAllCellCandidates(state.grid);
-    cellsWithCandidates.forEach((cellWithCandidates) => {
-      updateCellCandidates(
-        setState,
-        cellWithCandidates.cell,
-        cellWithCandidates.candidates,
-        true
-      );
+    cellsWithCandidates.forEach(({ cell, candidates }) => {
+      updateCell(setState, cell, { candidates: candidates }, true);
     });
   };
 
   const onFillSolvedClick = () => {
     const cellsWithValues = fillSolved(state.grid);
-    cellsWithValues.forEach((cellWithValue) => {
-      updateCellValue(setState, cellWithValue.cell, cellWithValue.value);
+    cellsWithValues.forEach(({ cell, value }) => {
+      updateCell(setState, cell, { value: value }, false);
     });
   };
 
