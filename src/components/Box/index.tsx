@@ -9,10 +9,16 @@ interface BoxProps {
   onCellChange: (
     cellPos: cellPos
   ) => (event: React.ChangeEvent<HTMLInputElement>) => void;
+  solved: boolean;
 }
 
-const Box = ({ cells, onCellClick, onCellChange }: BoxProps) => (
-  <div className="box">
+const Box = ({ cells, onCellClick, onCellChange, solved }: BoxProps) => (
+  <div
+    className="box"
+    style={{
+      borderColor: solved ? "green" : "#333",
+    }}
+  >
     {cells.map((cell, i) => {
       return (
         <Cell
@@ -20,6 +26,7 @@ const Box = ({ cells, onCellClick, onCellChange }: BoxProps) => (
           key={i}
           onCellClick={onCellClick}
           onCellChange={onCellChange}
+          solved={solved}
         />
       );
     })}

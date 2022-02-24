@@ -8,9 +8,11 @@ interface CellProps {
   onCellChange: (
     cellPos: cellPos
   ) => (event: React.ChangeEvent<HTMLInputElement>) => void;
+  solved: boolean;
 }
 
-const Cell = ({ cell, onCellClick, onCellChange }: CellProps) => {
+const Cell = ({ cell, onCellClick, onCellChange, solved }: CellProps) => {
+  const bgc = solved ? "#ddffdd" : "white";
   return (
     <div
       className="cell"
@@ -23,9 +25,7 @@ const Cell = ({ cell, onCellClick, onCellChange }: CellProps) => {
           : "1px dashed #888",
         borderBottom: [2, 5, 8].includes(cell.row) ? "none" : "1px dashed #888",
         backgroundColor:
-          cell.candidates.length === 1 && cell.showCandidates
-            ? "green"
-            : "white",
+          cell.candidates.length === 1 && cell.showCandidates ? "green" : bgc,
       }}
     >
       {cell.showCandidates ? (

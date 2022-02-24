@@ -19,6 +19,19 @@ interface CellWithValue {
   value: number;
 }
 
+export const solved = (grid: SudokuGrid): boolean => {
+  for (let i = 0; i < 9; i++) {
+    let invalidFound = [getRow, getColumn, getBox].some((getGroup) => {
+      const group = getGroup(grid, i)
+        .map(({ value }) => value)
+        .filter((value) => value !== "");
+      return new Set(group).size < 9;
+    });
+    if (invalidFound) return false;
+  }
+  return true;
+};
+
 export const getCandidates = (
   cell: SudokuCell,
   sudokuGrid: SudokuGrid

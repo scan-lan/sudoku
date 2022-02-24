@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useEffect } from "react";
 import "./App.css";
 import Grid from "./components/Grid";
 import Menu from "./components/Menu";
@@ -6,14 +7,10 @@ import {
   fillSolved,
   filterAllCellCandidates,
   getAllCellCandidates,
+  solved,
 } from "./logic/solve";
 import SudokuCell, { cellPos } from "./types/SudokuCell";
 import { sudokuCell } from "./types/SudokuTypes";
-
-interface AppState {
-  grid: SudokuCell[][];
-  filterCandidatesDisabled: boolean;
-}
 
 const grid = [
   ["", 5, 8, 7, "", "", "", "", 4],
@@ -75,6 +72,7 @@ const updateCell = (
   filterButtonDisabled?: boolean
 ) => {
   setState((prevState) => ({
+    ...prevState,
     grid: [
       ...prevState.grid.slice(0, cell.row),
       [
@@ -94,10 +92,17 @@ const updateCell = (
   }));
 };
 
+interface AppState {
+  grid: SudokuCell[][];
+  filterCandidatesDisabled: boolean;
+  solved: boolean;
+}
+
 const App = () => {
   const [state, setState] = useState<AppState>({
     grid: validSudokuGrid,
     filterCandidatesDisabled: true,
+    solved: false,
   });
 
   const onCellClick = (clickedCell: SudokuCell) => {
@@ -109,7 +114,6 @@ const App = () => {
   const onCellChange =
     (cell: cellPos) => (event: React.ChangeEvent<HTMLInputElement>) => {
       let newCellValue = parseInt(event.currentTarget.value);
-      console.log(newCellValue);
       updateCell(setState, cell, {
         value: isNaN(newCellValue) ? "" : newCellValue,
       });
@@ -148,9 +152,21 @@ const App = () => {
 
   const onClearClick = () => {
     state.grid.flat().forEach(({ row, column }) => {
-      updateCell(setState, { row, column }, { value: "", candidates: [] });
+      updateCell(
+        setState,
+        { row, column },
+        { value: "", candidates: [], showCandidates: false }
+      );
     });
   };
+
+  useEffect(() => {
+    if (solved(state.grid)) {
+      setState((prevState) => ({ ...prevState, solved: true }));
+    } else {
+      setState((prevState) => ({ ...prevState, solved: false }));
+    }
+  }, [state.grid]);
 
   return (
     <div className="App">
@@ -165,6 +181,7 @@ const App = () => {
         grid={state.grid}
         onCellClick={onCellClick}
         onCellChange={onCellChange}
+        solved={state.solved}
       />
     </div>
   );

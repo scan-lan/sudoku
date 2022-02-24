@@ -18,7 +18,7 @@ const Menu = ({
 }: MenuProps) => (
   <div className="menu">
     <button onClick={onGetAllCandidatesClick}>Get candidates</button>
-    <button disabled={filterCandidatesActive} onClick={onFilterCandidatesClick}>
+    <button disabled={false} onClick={onFilterCandidatesClick}>
       Filter candidates
     </button>
     <button onClick={onFillSolvedClick}>Fill solved</button>

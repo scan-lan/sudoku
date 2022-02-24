@@ -10,9 +10,10 @@ interface GridProps {
   onCellChange: (
     cellPos: cellPos
   ) => (event: React.ChangeEvent<HTMLInputElement>) => void;
+  solved: boolean;
 }
 
-const Grid = ({ grid, onCellClick, onCellChange }: GridProps) => {
+const Grid = ({ grid, onCellClick, onCellChange, solved }: GridProps) => {
   return (
     <div className="grid">
       {grid.map((_, i) => (
@@ -21,6 +22,7 @@ const Grid = ({ grid, onCellClick, onCellChange }: GridProps) => {
           onCellClick={onCellClick}
           onCellChange={onCellChange}
           key={i}
+          solved={solved}
         />
       ))}
     </div>
