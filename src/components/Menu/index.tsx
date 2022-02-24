@@ -5,6 +5,7 @@ interface MenuProps {
   onGetAllCandidatesClick: () => void;
   onFilterCandidatesClick: () => void;
   onFillSolvedClick: () => void;
+  onClearClick: () => void;
   filterCandidatesActive: boolean;
 }
 
@@ -12,6 +13,7 @@ const Menu = ({
   onGetAllCandidatesClick,
   onFilterCandidatesClick,
   onFillSolvedClick,
+  onClearClick,
   filterCandidatesActive,
 }: MenuProps) => (
   <div className="menu">
@@ -20,6 +22,7 @@ const Menu = ({
       Filter candidates
     </button>
     <button onClick={onFillSolvedClick}>Fill solved</button>
+    <button onClick={onClearClick}>Clear grid</button>
   </div>
 );
 

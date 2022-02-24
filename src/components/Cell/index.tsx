@@ -1,16 +1,16 @@
 import React from "react";
-import SudokuCell from "../../types/SudokuCell";
-import { coordinate } from "../../types/SudokuTypes";
+import SudokuCell, { cellPos } from "../../types/SudokuCell";
 import "./Cell.css";
 
 interface CellProps {
   cell: SudokuCell;
   onCellClick: (cell: SudokuCell) => void;
-  boxPosition?: coordinate;
-  gridPosition?: coordinate;
+  onCellChange: (
+    cellPos: cellPos
+  ) => (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Cell = ({ cell, onCellClick }: CellProps) => {
+const Cell = ({ cell, onCellClick, onCellChange }: CellProps) => {
   return (
     <div
       className="cell"
@@ -22,12 +22,13 @@ const Cell = ({ cell, onCellClick }: CellProps) => {
           ? "none"
           : "1px dashed #888",
         borderBottom: [2, 5, 8].includes(cell.row) ? "none" : "1px dashed #888",
-        backgroundColor: cell.candidates.length === 1 ? "green" : "white",
+        backgroundColor:
+          cell.candidates.length === 1 && cell.showCandidates
+            ? "green"
+            : "white",
       }}
     >
-      {cell.value ? (
-        <div className="value">{cell.value}</div>
-      ) : (
+      {cell.showCandidates ? (
         <div className="candidates">
           {cell.candidates.map((candidate, i) => (
             <div
@@ -42,6 +43,15 @@ const Cell = ({ cell, onCellClick }: CellProps) => {
             </div>
           ))}
         </div>
+      ) : (
+        <input
+          className="value"
+          type="number"
+          min={1}
+          max={9}
+          value={cell.value}
+          onChange={onCellChange({ row: cell.row, column: cell.column })}
+        ></input>
       )}
     </div>
   );

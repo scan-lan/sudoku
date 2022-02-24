@@ -1,4 +1,4 @@
-import SudokuCell, { SudokuGrid } from "../types/SudokuCell";
+import SudokuCell, { cellPos, SudokuGrid } from "../types/SudokuCell";
 import { excludeCandidatesInNakedSet } from "./excludeCandidatesInNakedSet";
 import {
   getBox,
@@ -10,18 +10,12 @@ import {
 } from "./gridLogic";
 
 export interface CellWithCandidates {
-  cell: {
-    row: number;
-    column: number;
-  };
+  cell: cellPos;
   candidates: number[];
 }
 
 interface CellWithValue {
-  cell: {
-    row: number;
-    column: number;
-  };
+  cell: cellPos;
   value: number;
 }
 

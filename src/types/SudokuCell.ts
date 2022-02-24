@@ -6,6 +6,12 @@ export default interface SudokuCell {
   value: sudokuCell;
   box: number;
   candidates: number[];
+  showCandidates: boolean;
+}
+
+export interface cellPos {
+  row: number;
+  column: number;
 }
 
 export type SudokuGrid = SudokuCell[][];

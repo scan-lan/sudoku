@@ -1,17 +1,27 @@
 import React from "react";
 import Cell from "../Cell";
-import SudokuCell from "../../types/SudokuCell";
+import SudokuCell, { cellPos } from "../../types/SudokuCell";
 import "./Box.css";
 
 interface BoxProps {
   cells: SudokuCell[];
   onCellClick: (cell: SudokuCell) => void;
+  onCellChange: (
+    cellPos: cellPos
+  ) => (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Box = ({ cells, onCellClick }: BoxProps) => (
+const Box = ({ cells, onCellClick, onCellChange }: BoxProps) => (
   <div className="box">
     {cells.map((cell, i) => {
-      return <Cell cell={cell} key={i} onCellClick={onCellClick} />;
+      return (
+        <Cell
+          cell={cell}
+          key={i}
+          onCellClick={onCellClick}
+          onCellChange={onCellChange}
+        />
+      );
     })}
   </div>
 );

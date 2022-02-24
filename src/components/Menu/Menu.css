@@ -1,23 +1,9 @@
 .menu {
   grid-area: menu;
+  padding: 2vw;
   display: grid;
   gap: 1rem;
-  align-items: center;
-  justify-items: center;
-  grid-template-rows: 1fr auto auto auto 1fr;
-  grid-template-columns: 1fr;
-}
-
-.menu > :nth-child(1) {
-  grid-row: 2;
-}
-
-.menu > :nth-child(2) {
-  grid-row: 3;
-}
-
-.menu > :nth-child(3) {
-  grid-row: 4;
+  place-content: center;
 }
 
 button {

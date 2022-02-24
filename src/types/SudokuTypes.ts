@@ -1,5 +1,5 @@
 type coordinate = [number, number];
-type sudokuCell = number | null;
+type sudokuCell = number | "";
 type sudokuGrid = sudokuCell[][];
 type sudokuGroup = "row" | "column" | "box";
 
