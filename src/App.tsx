@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useMemo } from "react";
 import { useEffect } from "react";
 import "./App.css";
 import Grid from "./components/Grid";
@@ -104,6 +105,7 @@ const App = () => {
     filterCandidatesDisabled: true,
     solved: false,
   });
+  const [history, setHistory] = useState<SudokuCell[][][]>([state.grid]);
 
   const onCellClick = (clickedCell: SudokuCell) => {
     if (!clickedCell.value) {
@@ -160,7 +162,22 @@ const App = () => {
     });
   };
 
+  const onUndoClick = () => {
+    history.pop();
+    const lastState = history.pop();
+    if (lastState !== undefined) {
+      console.log(lastState);
+      setState((prevState) => ({ ...prevState, grid: lastState }));
+    }
+  };
+
   useEffect(() => {
+    setHistory((prevHistory) => {
+      console.log("adding");
+
+      if (prevHistory.length > 100) prevHistory.shift();
+      return [...prevHistory, state.grid];
+    });
     if (solved(state.grid)) {
       setState((prevState) => ({ ...prevState, solved: true }));
     } else {
@@ -175,6 +192,7 @@ const App = () => {
         onGetAllCandidatesClick={onGetCandidatesClick}
         onFilterCandidatesClick={onFilterCandidatesClick}
         onClearClick={onClearClick}
+        onUndoClick={onUndoClick}
         filterCandidatesActive={state.filterCandidatesDisabled}
       />
       <Grid
