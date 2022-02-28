@@ -1,4 +1,5 @@
 import SudokuCell, { cellPos, SudokuGrid } from "../types/SudokuCell";
+import { sudokuCellValue } from "../types/SudokuTypes";
 import { excludeCandidatesInNakedSet } from "./excludeCandidatesInNakedSet";
 import {
   getBox,
@@ -11,12 +12,12 @@ import {
 
 export interface CellWithCandidates {
   cell: cellPos;
-  candidates: number[];
+  candidates: sudokuCellValue[];
 }
 
 interface CellWithValue {
   cell: cellPos;
-  value: number;
+  value: sudokuCellValue;
 }
 
 export const solved = (grid: SudokuGrid): boolean => {
@@ -35,8 +36,19 @@ export const solved = (grid: SudokuGrid): boolean => {
 export const getCandidates = (
   cell: SudokuCell,
   sudokuGrid: SudokuGrid
-): number[] =>
-  [1, 2, 3, 4, 5, 6, 7, 8, 9].filter(
+): sudokuCellValue[] => {
+  const candidates: sudokuCellValue[] = [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+  ];
+  candidates.filter(
     (candidate) =>
       !getColumn(sudokuGrid, cell.column)
         .map((sudokuCell) => sudokuCell.value)
@@ -48,6 +60,8 @@ export const getCandidates = (
         .map((sudokuCell) => sudokuCell.value)
         .includes(candidate)
   );
+  return candidates;
+};
 
 export const filterCandidates = (
   cell: SudokuCell,

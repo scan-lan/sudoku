@@ -1,11 +1,11 @@
-import { sudokuCell } from "./SudokuTypes";
+import { sudokuCellValue } from "./SudokuTypes";
 
 export default interface SudokuCell {
   row: number;
   column: number;
-  value: sudokuCell;
+  value: sudokuCellValue;
   box: number;
-  candidates: number[];
+  candidates: sudokuCellValue[];
   showCandidates: boolean;
 }
 

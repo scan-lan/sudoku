@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useMemo } from "react";
 import { useEffect } from "react";
 import "./App.css";
 import Grid from "./components/Grid";
@@ -11,19 +10,19 @@ import {
   solved,
 } from "./logic/solve";
 import SudokuCell, { cellPos } from "./types/SudokuCell";
-import { sudokuCell } from "./types/SudokuTypes";
+import { sudokuCellValue, valueIsSudokuValue } from "./types/SudokuTypes";
 
-const grid = [
-  ["", 5, 8, 7, "", "", "", "", 4],
-  [6, "", "", 3, 5, "", "", 9, 7],
-  ["", "", "", "", "", "", 5, "", 6],
-  ["", "", "", "", 2, "", "", "", ""],
-  [5, "", 7, "", "", "", 4, "", 9],
-  ["", "", "", "", 7, "", "", "", ""],
-  [2, "", 5, "", "", "", "", "", ""],
-  [1, 6, "", "", 4, 2, "", "", 5],
-  [3, "", "", "", "", 5, 8, 6, ""],
-] as ("" | number)[][];
+const grid: sudokuCellValue[][] = [
+  ["", "5", "8", "7", "", "", "", "", "4"],
+  ["6", "", "", "3", "5", "", "", "9", "7"],
+  ["", "", "", "", "", "", "5", "", "6"],
+  ["", "", "", "", "2", "", "", "", ""],
+  ["5", "", "7", "", "", "", "4", "", "9"],
+  ["", "", "", "", "7", "", "", "", ""],
+  ["2", "", "5", "", "", "", "", "", ""],
+  ["1", "6", "", "", "4", "2", "", "", "5"],
+  ["3", "", "", "", "", "5", "8", "6", ""],
+];
 
 const validSudokuGrid = [[], [], [], [], [], [], [], [], []] as SudokuCell[][];
 for (let i = 0; i < 9; i++) {
@@ -61,8 +60,8 @@ for (let i = 0; i < 9; i++) {
 // }
 
 interface NewCell {
-  candidates?: number[];
-  value?: sudokuCell;
+  candidates?: sudokuCellValue[];
+  value?: sudokuCellValue;
   showCandidates?: boolean;
 }
 
@@ -115,10 +114,12 @@ const App = () => {
 
   const onCellChange =
     (cell: cellPos) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      let newCellValue = parseInt(event.currentTarget.value);
-      updateCell(setState, cell, {
-        value: isNaN(newCellValue) ? "" : newCellValue,
-      });
+      let newCellValue = event.currentTarget.value;
+      if (valueIsSudokuValue(newCellValue)) {
+        updateCell(setState, cell, { value: newCellValue });
+      } else {
+        return;
+      }
     };
 
   const onGetCandidatesClick = () => {

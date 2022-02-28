@@ -1,5 +1,5 @@
 import SudokuCell, { SudokuGrid } from "../types/SudokuCell";
-import { sudokuGroup } from "../types/SudokuTypes";
+import { sudokuCellValue, sudokuGroup } from "../types/SudokuTypes";
 import { getNeighbourFunctions, NeighbourFunction } from "./gridLogic";
 import { CellWithCandidates } from "./solve";
 
@@ -43,8 +43,8 @@ export const excludeCandidatesInNakedSet = (
   grid: SudokuGrid
 ): CellWithCandidates => {
   // TODO: simplify this !!
-  const cellCandidates = [] as number[];
-  const impossibleValues = new Set<number>();
+  const cellCandidates = [] as sudokuCellValue[];
+  const impossibleValues = new Set<sudokuCellValue>();
   const neighbourFunctions = getNeighbourFunctions(
     cell,
     grid
