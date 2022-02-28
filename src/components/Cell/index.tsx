@@ -46,12 +46,9 @@ const Cell = ({ cell, onCellClick, onCellChange, solved }: CellProps) => {
       ) : (
         <input
           className="value"
-          type="number"
-          min={1}
-          max={9}
           value={cell.value}
           onChange={onCellChange({ row: cell.row, column: cell.column })}
-        ></input>
+        />
       )}
     </div>
   );
