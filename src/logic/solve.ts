@@ -48,7 +48,7 @@ export const getCandidates = (
     "8",
     "9",
   ];
-  candidates.filter(
+  return candidates.filter(
     (candidate) =>
       !getColumn(sudokuGrid, cell.column)
         .map((sudokuCell) => sudokuCell.value)
@@ -60,7 +60,27 @@ export const getCandidates = (
         .map((sudokuCell) => sudokuCell.value)
         .includes(candidate)
   );
-  return candidates;
+};
+
+export const getAllCellCandidates = (
+  sudokuGrid: SudokuGrid
+): CellWithCandidates[] => {
+  const cellsWithCandidates = [] as CellWithCandidates[];
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+      const cell = sudokuGrid[i][j];
+      if (!cell.value) {
+        cellsWithCandidates.push({
+          cell: {
+            row: i,
+            column: j,
+          },
+          candidates: getCandidates(cell, sudokuGrid),
+        });
+      }
+    }
+  }
+  return cellsWithCandidates;
 };
 
 export const filterCandidates = (
@@ -111,27 +131,6 @@ export const filterAllCellCandidates = (
     }
   }
 
-  return cellsWithCandidates;
-};
-
-export const getAllCellCandidates = (
-  sudokuGrid: SudokuGrid
-): CellWithCandidates[] => {
-  const cellsWithCandidates = [] as CellWithCandidates[];
-  for (let i = 0; i < 9; i++) {
-    for (let j = 0; j < 9; j++) {
-      const cell = sudokuGrid[i][j];
-      if (!cell.value) {
-        cellsWithCandidates.push({
-          cell: {
-            row: i,
-            column: j,
-          },
-          candidates: getCandidates(cell, sudokuGrid),
-        });
-      }
-    }
-  }
   return cellsWithCandidates;
 };
 
